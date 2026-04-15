@@ -1,0 +1,118 @@
+# ==============================
+# 1. IMPORT LIBRARIES
+# ==============================
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+# ==============================
+# 2. LOAD DATA
+# ==============================
+data = pd.read_csv("sales.csv")
+
+# Clean column names
+data.columns = data.columns.str.strip().str.lower()
+
+
+# ==============================
+# 3. BASIC INFO
+# ==============================
+print("\nFirst 5 Rows:")
+print(data.head())
+
+print("\nColumns:")
+print(data.columns)
+
+
+# ==============================
+# 4. KEY METRICS (KPIs)
+# ==============================
+total_sales = data['sales'].sum()
+total_profit = data['profit'].sum()
+total_orders = len(data)
+
+print("\n===== KEY METRICS =====")
+print(f"Total Sales: {total_sales:.2f}")
+print(f"Total Profit: {total_profit:.2f}")
+print(f"Total Orders: {total_orders}")
+
+
+# ==============================
+# 5. ANALYSIS
+# ==============================
+
+# Sales by Category
+category_sales = data.groupby('category')['sales'].sum()
+
+# Sales by Region
+region_sales = data.groupby('region')['sales'].sum()
+
+# Top 5 Products (Sub-Category)
+top_products = data.groupby('sub-category')['sales'].sum().sort_values(ascending=False).head(5)
+
+print("\nTop 5 Products by Sales:")
+print(top_products)
+
+
+# Loss Analysis
+loss_data = data[data['profit'] < 0]
+
+print("\nLoss Analysis:")
+print(f"Number of Loss-making Orders: {len(loss_data)}")
+print(f"Total Loss: {loss_data['profit'].sum():.2f}")
+
+
+# ==============================
+# 6. VISUALIZATION (PRO LEVEL)
+# ==============================
+
+sns.set(style="whitegrid")
+
+# Sales by Category
+plt.figure(figsize=(8,5))
+sns.barplot(x=category_sales.index, y=category_sales.values, hue=category_sales.index, legend=False)
+plt.title('Sales by Category')
+plt.xlabel('Category')
+plt.ylabel('Sales')
+plt.show()
+
+# Sales by Region
+plt.figure(figsize=(8,5))
+sns.barplot(x=region_sales.index, y=region_sales.values, hue=region_sales.index, legend=False)
+plt.title('Sales by Region')
+plt.xlabel('Region')
+plt.ylabel('Sales')
+plt.show()
+
+# Top 5 Products
+plt.figure(figsize=(8,5))
+sns.barplot(x=top_products.index, y=top_products.values, hue=top_products.index, legend=False)
+plt.title('Top 5 Products by Sales')
+plt.xticks(rotation=45)
+plt.show()
+
+# Profit by Category
+# Profit by Category
+profit_by_category = data.groupby('category')['profit'].sum()
+
+plt.figure(figsize=(8,5))
+sns.barplot(x=profit_by_category.index, y=profit_by_category.values, hue=profit_by_category.index, legend=False)
+plt.title('Profit by Category')
+plt.xlabel('Category')
+plt.ylabel('Profit')
+plt.show()
+
+# Sales vs Profit Scatter
+plt.figure(figsize=(8,5))
+sns.scatterplot(x='sales', y='profit', hue='category', data=data)
+plt.title('Sales vs Profit (by Category)')
+plt.xlabel('Sales')
+plt.ylabel('Profit')
+plt.show()
+
+
+# ==============================
+# 7. DONE
+# ==============================
+print("\nAnalysis Completed Successfully!")
