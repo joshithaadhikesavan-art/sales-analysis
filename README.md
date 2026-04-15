@@ -22,5 +22,4 @@ This project analyzes retail sales data to generate business insights using Pyth
 - Some transactions result in losses
 - High sales does not always mean high profit
 
-## 📸 Screenshots
-(Add images here)
+
